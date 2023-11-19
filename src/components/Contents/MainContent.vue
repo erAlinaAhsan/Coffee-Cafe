@@ -37,6 +37,11 @@ export default {
     imagePath9: String,
     showListContainer: Boolean,
   },
+  data() {
+    return {
+      imageUrll: require("@/assets/background.jpeg"),
+    };
+  },
   methods: {
     toggleDetails(coffee) {
       // Toggle the showDetails property of the clicked coffee

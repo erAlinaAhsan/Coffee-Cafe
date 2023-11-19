@@ -40,15 +40,15 @@ export default {
   },
   data() {
     return {
-      imagePath: require("@/assets/bars.png"),
+      imagePath: require("@/assets/bars.jpeg"),
       imagePath1: require("@/assets/search-icon.png"),
       imagePath2: require("@/assets/coffee-shop-logo.jpeg"),
-      imagePath3: require("@/assets/home.png"),
-      imagePath4: require("@/assets/about-us.png"),
-      imagePath5: require("@/assets/menu.png"),
-      imagePath6: require("@/assets/franchise.webp"),
-      imagePath7: require("@/assets/contact.png"),
-      imagePath8: require("@/assets/messages.webp"),
+      imagePath3: require("@/assets/home.jpeg"),
+      imagePath4: require("@/assets/about-us.jpeg"),
+      imagePath5: require("@/assets/menu.jpeg"),
+      imagePath6: require("@/assets/franchise.jpeg"),
+      imagePath7: require("@/assets/contact.jpeg"),
+      imagePath8: require("@/assets/messages.jpeg"),
       imagePath9: require("@/assets/banner.webp"),
       coffees: [],
       showListContainer: false,
@@ -187,6 +187,7 @@ export default {
   box-sizing: border-box;
 }
 body {
+  overflow-x: hidden;
   overflow-y: scroll;
   box-sizing: border-box;
 }

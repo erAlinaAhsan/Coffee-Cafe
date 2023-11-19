@@ -62,7 +62,7 @@ export default {
   display: flex;
   align-items: center;
   margin-bottom: 30px;
-  margin-top: 30px;
+  margin-top: 60px;
   width: fit-content;
   flex-wrap: wrap;
   color: rgb(64, 64, 64);

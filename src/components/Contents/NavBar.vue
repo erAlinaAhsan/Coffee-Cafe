@@ -1,5 +1,10 @@
 <template>
-  <nav class="flex-div">
+  <nav
+    class="flex-div"
+    :style="{
+      backgroundImage: 'url(' + imageUrl + ')',
+    }"
+  >
     <img :src="imagePath" class="menu-icon" />
     <div class="nav-middle">
       <div class="search-box">
@@ -9,7 +14,12 @@
     </div>
     <img :src="imagePath2" class="coffeeshop-logo" />
   </nav>
-  <nav class="flex-div1 btnbtn">
+  <nav
+    class="flex-div1 btnbtn"
+    :style="{
+      backgroundImage: 'url(' + imageUrl + ')',
+    }"
+  >
     <h4 class="btn1" @click="emitAllButtonClick">Our Menu</h4>
     <h4 class="btn2" @click="filterHotCoffee">Hot-Coffee</h4>
     <h4 class="btn3" @click="filterColdCoffee">Cold-Coffee</h4>
@@ -24,6 +34,11 @@ export default {
     imagePath: String,
     imagePath1: String,
     imagePath2: String,
+  },
+  data() {
+    return {
+      imageUrl: require("@/assets/navbar.jpeg"),
+    };
   },
   methods: {
     emitAllButtonClick() {
@@ -53,7 +68,8 @@ nav {
   padding: 5px;
   align-content: center;
   justify-content: space-between;
-  background-color: rgba(165, 42, 42, 0.5);
+  overflow-x: hidden;
+  /* background-color: rgba(165, 42, 42, 0.5); */
 }
 nav.flex-div {
   margin-right: 20px;
@@ -65,8 +81,7 @@ nav.flex-div1 {
   align-items: center;
   position: absolute;
   justify-content: flex-end;
-  margin-top: 70px;
-  padding: 20px;
+  margin-top: 60px;
   overflow-x: hidden;
   width: 100%;
 }
@@ -83,7 +98,7 @@ img.search-icon {
   /* margin-top: 5px; */
 }
 img.coffeeshop-logo {
-  margin-right: 30px;
+  margin-right: 150px;
 }
 .nav-middle .search-box {
   display: flex;
@@ -96,15 +111,16 @@ img.coffeeshop-logo {
 }
 .flex-div1 h4 {
   display: flex;
-  align-self: center;
+  align-self: auto;
   border: 1px solid #ccc;
   padding: 10px;
+  color: #ccc;
   border-radius: 5px;
   margin-right: 200px;
   width: 100px;
   border: 0;
   outline: 0;
-  background-color: rgb(168, 109, 109);
+  background-color: rgb(73, 43, 43);
   cursor: pointer;
   transition: background-color 0.3s ease;
 
@@ -120,7 +136,8 @@ img.coffeeshop-logo {
   padding: 12px;
   transition: padding 0.4s ease;
   border-radius: 5px;
-  background-color: #e3e0e0;
+  background-color: #ccc;
+  color: black;
 }
 
 .flex-div1 button:hover {
