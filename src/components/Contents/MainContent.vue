@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="container">
+    <div class="container large-container">
       <div class="banner">
         <img :src="imagePath9" />
       </div>

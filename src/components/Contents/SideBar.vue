@@ -1,5 +1,5 @@
 <template>
-  <div class="sidebar">
+  <div class="sidebar small-sidebar">
     <div class="shortcut-links">
       <a href=""
         ><img :src="imagePath3" />
@@ -79,6 +79,9 @@ export default {
 }
 .small-sidebar {
   width: 5%;
+}
+.small-sidebar img {
+  display: none;
 }
 .small-sidebar a p {
   display: none;
