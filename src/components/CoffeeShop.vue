@@ -3,25 +3,17 @@
     <NavBar
       :imagePath="imagePath"
       :imagePath1="imagePath1"
-      :imagePath2="imagePath2"
       @allButtonClick="toggleListContainer"
-      @filterHotCoffee="filterHotCoffee"
-      @filterColdCoffee="filterColdCoffee"
-      @filterBlackCoffee="filterBlackCoffee"
+      @filterByIngredient="filterByIngredient"
+      @searchByIngredient="handleSearchByIngredient"
+      :ingredientsList="ingredientsList"
     />
-    <SideBar
-      :imagePath3="imagePath3"
-      :imagePath4="imagePath4"
-      :imagePath5="imagePath5"
-      :imagePath6="imagePath6"
-      :imagePath7="imagePath7"
-      :imagePath8="imagePath8"
-    />
+    <SideBar />
     <MainContent
-      :msg="msg"
       :coffees="coffees"
       :imagePath9="imagePath9"
       :showListContainer="showListContainer"
+      :filteredCoffees="filteredCoffees"
     />
   </div>
 </template>
@@ -40,116 +32,82 @@ export default {
   },
   data() {
     return {
-      imagePath: require("@/assets/bars.jpeg"),
+      imagePath: require("@/assets/bar.png"),
       imagePath1: require("@/assets/search-icon.png"),
       imagePath2: require("@/assets/coffee-shop-logo.jpeg"),
-      imagePath3: require("@/assets/home.jpeg"),
-      imagePath4: require("@/assets/about-us.jpeg"),
-      imagePath5: require("@/assets/menu.jpeg"),
-      imagePath6: require("@/assets/franchise.jpeg"),
-      imagePath7: require("@/assets/contact.jpeg"),
       imagePath8: require("@/assets/messages.jpeg"),
       imagePath9: require("@/assets/banner.webp"),
       coffees: [],
       showListContainer: false,
-      hotCoffeeClicked: false,
-      coldCoffeeClicked: false,
-      blackCoffeeClicked: false,
+      filteredCoffees: [],
+      ingredientsList: [],
+      searchQuery: "",
     };
   },
   methods: {
     toggleListContainer() {
-      this.showListContainer = !this.showListContainer;
-      if (this.showListContainer) {
-        // Fetch the coffee data again when "All" or "Hot-Coffee" button is clicked
-        fetch("https://api.sampleapis.com/coffee/hot")
-          .then((response) => response.json())
-          .then((alina) => {
-            this.coffees = alina.map((coffee) => ({
-              ...coffee,
-              showDetails: false,
-            }));
-          })
-          .catch((error) => {
-            console.error("Error fetching data:", error);
-          });
+      if (!this.showListContainer) {
+        this.filteredCoffees = [...this.coffees];
       }
-    },
-
-    async filterHotCoffee() {
-      this.hotCoffeeClicked = true;
       this.showListContainer = !this.showListContainer;
-      const specificCoffeeIds = [2, 3, 4, 6, 7, 8, 9, 10, 11];
-      const coffeeData = await fetch("https://api.sampleapis.com/coffee/hot")
-        .then((response) => response.json())
-        .then((alina) => {
-          return alina.filter((coffee) =>
-            specificCoffeeIds.includes(coffee.id)
-          );
-        })
-        .catch((error) => {
-          console.error("Error fetching data:", error);
-          return [];
-        });
-
-      this.coffees = coffeeData.map((coffee) => ({
-        ...coffee,
-        showDetails: false,
-      }));
+    },
+    filterCoffees(filterFunction) {
+      if (filterFunction) {
+        this.filteredCoffees = this.coffees.filter(filterFunction);
+      } else {
+        this.filteredCoffees = [...this.coffees];
+      }
+      this.showListContainer = this.filteredCoffees.length > 0;
     },
 
-    async filterColdCoffee() {
-      this.coldCoffeeClicked = true;
-      this.showListContainer = !this.showListContainer;
-      const specificCoffeeIds = [14, 15, 16, 17, 18, 19, 20];
-      const coffeeData = await fetch("https://api.sampleapis.com/coffee/hot")
-        .then((response) => response.json())
-        .then((alina) => {
-          return alina.filter((coffee) =>
-            specificCoffeeIds.includes(coffee.id)
-          );
-        })
-        .catch((error) => {
-          console.error("Error fetching data:", error);
-          return [];
-        });
-
-      this.coffees = coffeeData.map((coffee) => ({
-        ...coffee,
-        showDetails: false,
-      }));
-    },
-
-    async filterBlackCoffee() {
-      this.blackCoffeeClicked = true;
-      this.showListContainer = !this.showListContainer;
-      const specificCoffeeIds = [1, 5, 12, 13];
-      const coffeeData = await fetch("https://api.sampleapis.com/coffee/hot")
-        .then((response) => response.json())
-        .then((alina) => {
-          return alina.filter((coffee) =>
-            specificCoffeeIds.includes(coffee.id)
-          );
-        })
-        .catch((error) => {
-          console.error("Error fetching data:", error);
-          return [];
-        });
-
-      this.coffees = coffeeData.map((coffee) => ({
-        ...coffee,
-        showDetails: false,
-      }));
-    },
-  },
-  created() {
-    fetch("https://api.sampleapis.com/coffee/hot")
-      .then((response) => response.json())
-      .then((alina) => {
-        this.coffees = alina.map((coffee) => ({
+    async fetchData() {
+      try {
+        const response = await fetch("https://api.sampleapis.com/coffee/hot");
+        const data = await response.json();
+        this.coffees = data.map((coffee) => ({
           ...coffee,
           showDetails: false,
         }));
+        this.ingredientsList = this.extractUniqueIngredients();
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    },
+
+    extractUniqueIngredients() {
+      console.log("coffees", this.coffees);
+      let ingredientsArray = this.coffees.map((coffee) => {
+        return coffee.ingredients;
+      });
+      const flatArray = ingredientsArray.flat();
+      let ingredients = [...new Set(flatArray)];
+      return ingredients;
+    },
+
+    filterByIngredient(ingredient) {
+      const lowerCaseIngredient = ingredient.toLowerCase();
+      this.filterCoffees((coffee) =>
+        coffee.ingredients.some((coffeeIngredient) =>
+          coffeeIngredient.toLowerCase().includes(lowerCaseIngredient)
+        )
+      );
+    },
+    handleSearchByIngredient(query) {
+      this.searchQuery = query;
+      this.filterCoffees((coffee) =>
+        coffee.ingredients.some((coffeeIngredient) =>
+          coffeeIngredient
+            .toLowerCase()
+            .includes(this.searchQuery.toLowerCase())
+        )
+      );
+    },
+  },
+  created() {
+    this.fetchData()
+      .then(() => {
+        this.selectedIngredient = "";
+        this.filterCoffees();
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -157,10 +115,9 @@ export default {
   },
   mounted() {
     var menuIcon = document.querySelector(".menu-icon");
-    var btnbtn = document.querySelector(".btnbtn");
     var sidebar = document.querySelector(".sidebar");
     var container = document.querySelector(".container");
-    var banner = document.querySelector(".banner");
+
     var imgsList = document.querySelectorAll(".imgs");
     var listcontainer = document.querySelector(".list-container");
 
@@ -168,9 +125,7 @@ export default {
       sidebar.classList.toggle("small-sidebar");
       container.classList.toggle("large-container");
     };
-    btnbtn.onclick = function () {
-      banner.classList.toggle("hidden-container");
-    };
+
     imgsList.forEach((img) => {
       img.onclick = function () {
         listcontainer.classList.toggle("listdesp-container");
@@ -179,52 +134,13 @@ export default {
   },
 };
 </script>
+
+
 <style scoped>
 * {
   margin: 0;
   padding: 0;
   font-family: "poppins", sans-serif;
   box-sizing: border-box;
-}
-body {
-  overflow-x: hidden;
-  overflow-y: scroll;
-  box-sizing: border-box;
-}
-
-body::-webkit-scrollbar {
-  width: 5px;
-}
-
-body::-webkit-scrollbar-thumb {
-  background: #7e7e7e;
-  border-radius: 50px;
-}
-@media (max-width: 900px) {
-  .menu-icon {
-    display: none;
-  }
-  .sidebar {
-    display: none;
-  }
-  .container,
-  .large-container {
-    padding-left: 5%;
-    padding-right: 5%;
-    overflow-x: hidden;
-  }
-  nav img {
-    display: none;
-  }
-
-  .nav-middle .search-box input {
-    width: 100%;
-  }
-  .nav-middle .search-icon {
-    display: none;
-  }
-  .coffeeshop-logo {
-    width: 90px;
-  }
 }
 </style>

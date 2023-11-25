@@ -1,30 +1,12 @@
 <template>
   <div class="sidebar small-sidebar">
     <div class="shortcut-links">
-      <a href=""
-        ><img :src="imagePath3" />
-        <p>Home</p></a
-      >
-      <a href=""
-        ><img :src="imagePath4" />
-        <p>About Us</p></a
-      >
-      <a href=""
-        ><img :src="imagePath5" />
-        <p>Coffee Club</p></a
-      >
-      <a href=""
-        ><img :src="imagePath6" />
-        <p>Order Online</p></a
-      >
-      <a href=""
-        ><img :src="imagePath8" />
-        <p>Behind the Beans</p></a
-      >
-      <a href=""
-        ><img :src="imagePath7" />
-        <p>Store Locator</p></a
-      >
+      <a href=""> <p>Home</p></a>
+      <a href=""> <p>About Us</p></a>
+      <a href=""> <p>Coffee Club</p></a>
+      <a href=""> <p>Order Online</p></a>
+      <a href=""> <p>Behind the Beans</p></a>
+      <a href=""> <p>Store Locator</p></a>
       <hr />
     </div>
   </div>
@@ -33,39 +15,30 @@
 <script>
 export default {
   name: "SideBar",
-  props: {
-    imagePath3: String,
-    imagePath4: String,
-    imagePath5: String,
-    imagePath6: String,
-    imagePath7: String,
-    imagePath8: String,
-  },
 };
 </script>
 
 <style scoped>
 .sidebar {
-  background: #fff;
+  display: flex;
   width: 15%;
   height: 100vh;
-  position: fixed;
+  position: absolute;
   top: 0;
+  margin-top: 120px;
   padding-left: 2%;
   padding-top: 80px;
 }
-.shortcut-links a img {
+/* .shortcut-links a img {
   width: 40px;
   margin-right: 20px;
-}
+} */
 .shortcut-links a {
   display: flex;
-  align-items: center;
-  margin-bottom: 30px;
-  margin-top: 60px;
+  justify-content: flex-start;
+  margin-top: 10px;
   width: fit-content;
-  flex-wrap: wrap;
-  color: rgb(64, 64, 64);
+  color: #9e9e9e;
   text-decoration: none;
 }
 .shortcut-links a:first-child {
@@ -75,7 +48,8 @@ export default {
   border: 0;
   height: 1px;
   background: #ccc;
-  width: 85%;
+  width: 90%;
+  margin-right: 70px;
 }
 .small-sidebar {
   width: 5%;
@@ -90,7 +64,16 @@ export default {
   display: none;
 }
 .small-sidebar hr {
+  display: none;
   width: 50%;
   margin-bottom: 25px;
+}
+@media (max-width: 900px) {
+  .sidebar {
+    width: 15%;
+  }
+  .shortcut-links p {
+    align-self: flex-start;
+  }
 }
 </style>

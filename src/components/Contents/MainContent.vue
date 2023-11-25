@@ -1,13 +1,10 @@
 <template>
   <div>
-    <div class="container large-container">
-      <div class="banner">
-        <img :src="imagePath9" />
-      </div>
+    <div class="container">
       <div class="list-container" v-if="showListContainer">
         <div
           class="flex-div"
-          v-for="coffee in filteredCoffees"
+          v-for="coffee in displayedCoffees"
           :key="coffee.id"
           display="flex"
           @click="toggleDetails(coffee)"
@@ -32,26 +29,19 @@
 export default {
   name: "MainContent",
   props: {
-    msg: String,
     coffees: Array,
     imagePath9: String,
     showListContainer: Boolean,
-  },
-  data() {
-    return {
-      imageUrll: require("@/assets/background.jpeg"),
-    };
+    filteredCoffees: Array,
   },
   methods: {
     toggleDetails(coffee) {
-      // Toggle the showDetails property of the clicked coffee
       coffee.showDetails = !coffee.showDetails;
     },
   },
   computed: {
-    filteredCoffees() {
-      // Filter coffees based on the showListContainer prop
-      return this.showListContainer ? this.coffees : [];
+    displayedCoffees() {
+      return this.showListContainer ? this.filteredCoffees : this.coffees;
     },
   },
 };
@@ -61,23 +51,11 @@ export default {
 
 <style scoped>
 .container {
-  background: #f9f9f9;
-  padding-left: 17%;
-  padding-right: 2%;
-  padding-top: 20px;
   padding-bottom: 20px;
-  margin-top: 250px;
   overflow-x: hidden;
+  margin-top: 100px;
 }
-.banner {
-  display: flex;
-  width: 100%;
-}
-.banner img {
-  width: 100%;
-  height: 60vh;
-  border-radius: 8px;
-}
+
 .list-container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -89,23 +67,33 @@ export default {
   display: none;
 }
 .large-container {
-  padding-left: 7%;
+  padding-left: 12%;
   overflow-x: hidden;
+  /* margin-right: 70px; */
 }
-.hidden-container {
+/* .hidden-container {
   display: none;
-}
-.flex-div img {
-  width: 70%;
+} */
+.imgs {
+  width: 250px;
+  height: 300px;
   border-radius: 3%;
   margin-right: 10px;
 }
 .flex-div {
   align-items: flex-start;
-  margin-top: 7px;
+  margin-top: 70px;
 }
-.description {
-  color: #5a5a5a;
+.flex-div p {
+  color: #9e9e9e;
   font-size: 14px;
+}
+@media (max-width: 900px) {
+  .container,
+  .large-container {
+    padding-left: 5%;
+    padding-right: 5%;
+    overflow-x: hidden;
+  }
 }
 </style>
